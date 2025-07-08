@@ -9,7 +9,11 @@ import { HelloService } from './hello.service';
 @Controller('hello')
 export class HelloController {
   //  dependency injection
-  constructor(private readonly helloService: HelloService) {}
+
+  // Declares a parameter in the constructor
+  // Creates a property this.userService
+  // Assigns the injected instance to that property
+  constructor(private readonly helloService: HelloService) { }
 
   @Get()
   getHello(): string {

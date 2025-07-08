@@ -10,6 +10,6 @@ import { HelloService } from './hello.service';
   // import other modules iff needed
   // imports: [],
   // Export services if neeeded i otehr modueles
-  // exports: [],
+  exports: [HelloService],
 })
 export class HelloModule {}
