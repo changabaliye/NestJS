@@ -5,6 +5,8 @@ import { Post as PostInterface } from './interfaces/post.interface';
 @Controller('post')
 export class PostController {
     constructor(private readonly postService: PostService) { }
+    
+    // GET /post?search=nest
 
     @Get()
     findAll(@Query('search') search?: string): PostInterface[] {
