@@ -8,14 +8,14 @@ async function bootstrap() {
   //global setting
   //env
 
-  //starts a http server
-
+  //starts a http server bodies automatically
+  // validating incoming requests 
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // strips properties that dont have decorators
-      forbidNonWhitelisted: true,
+      forbidNonWhitelisted: true, // Rejects requests that contain properties not in your DTO
       transform: true, // automatically transforms payloads to be objects type according to their dto class
-      disableErrorMessages: true
+      disableErrorMessages: false,
     })
   )
 

@@ -1,5 +1,7 @@
 import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
+// DTO -> Data transfer object
+
 export class UpdatePostDto {
     @IsOptional()
     @IsNotEmpty({ message: 'Title is rquired' })

@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Post as PostInterface } from './interfaces/post.interface';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { PostsExistPipe } from './pipes/post-exists.pipe';
 
 @Controller('post')
 export class PostController {
     constructor(private readonly postService: PostService) { }
-    
+
     // GET /post?search=nest
 
     @Get()
@@ -26,19 +29,36 @@ export class PostController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    create(@Body() createPostData: Omit<PostInterface, 'id' | 'createdAt'>): PostInterface {
+    // if you want to use pipes only in this controller
+    @UsePipes(
+        new ValidationPipe({
+            whitelist: true,
+            forbidNonWhitelisted: true,
+            transform: true,
+            disableErrorMessages: false,
+        })
+    )
+    create(@Body() createPostData: CreatePostDto): PostInterface {
         return this.postService.create(createPostData);
     }
 
     @Put(':id')
+    @UsePipes(
+        new ValidationPipe({
+            whitelist: true,
+            forbidNonWhitelisted: true,
+            transform: true,
+            disableErrorMessages: false,
+        })
+    )
     update(@Param('id', ParseIntPipe) id: number,
-        @Body() updatedData: Partial<Omit<PostInterface, 'id' | 'createdAt'>>): PostInterface {
-            return this.postService.update(id,updatedData)
+        @Body() updatedData: UpdatePostDto): PostInterface {
+        return this.postService.update(id, updatedData)
     }
 
     @Delete(":id")
     @HttpCode(HttpStatus.NO_CONTENT)
-    remove(@Param('id',ParseIntPipe) id : number) : {message : string} {
+    remove(@Param('id', ParseIntPipe, PostsExistPipe) id: number): { message: string } {
         return this.postService.remove(id);
     }
 }
