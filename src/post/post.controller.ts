@@ -14,7 +14,8 @@ export class PostController {
     @Get()
     findAll(@Query('search') search?: string): PostInterface[] {
         const extractAllPosts = this.postService.findAll();
-
+           
+        let alread = 5;
         if (search) {
             return extractAllPosts.filter(singlePost => singlePost.title.toLowerCase().includes(search))
         }
