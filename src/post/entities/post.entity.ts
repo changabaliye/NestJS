@@ -15,8 +15,8 @@ export class Post {
     authorName : string;
     
     @UpdateDateColumn()
-    date : Date;
+    createdDate : Date;
 
-
-
+    @UpdateDateColumn()
+    updatedDate : Date;
 }

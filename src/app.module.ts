@@ -14,8 +14,8 @@ import { Post } from './post/entities/post.entity';
         username : 'nestuser',
         password : 'nestpass',
         database : 'nestdb',
-        entities : [],
-
+        entities : [Post], // array of entity that we want to register
+        synchronize : true // dev mode
        }
     ),PostModule],
   controllers: [AppController],

@@ -68,7 +68,6 @@ const metadata = new PhotoMetadata();
 
 
 //?--------------------------
-        const metadata = new PhotoMetadata();
 
 AppDataSource.initialize().then(async () => {
     photo.name = "WAda"
