@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PostService } from './post.service';
-import { Post as PostInterface } from './interfaces/post.interface';
+// import { Post as PostInterface } from './interfaces/post.interface';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostsExistPipe } from './pipes/post-exists.pipe';
+import { Post as postEntity } from './entities/post.entity';
 
 @Controller('post')
 export class PostController {
@@ -12,19 +13,22 @@ export class PostController {
     // GET /post?search=nest
 
     @Get()
-    findAll(@Query('search') search?: string): PostInterface[] {
-        const extractAllPosts = this.postService.findAll();
-           
-        let alread = 5;
-        if (search) {
-            return extractAllPosts.filter(singlePost => singlePost.title.toLowerCase().includes(search))
-        }
-
-        return extractAllPosts;
+    async findAll() : Promise<postEntity[]> {
+        return this.postService.findAll();
     }
+    // findAll(@Query('search') search?: string): PostInterface[] {
+    //     const extractAllPosts = this.postService.findAll();
+           
+    //     let alread = 5;
+    //     if (search) {
+    //         return extractAllPosts.filter(singlePost => singlePost.title.toLowerCase().includes(search))
+    //     }
+
+    //     return extractAllPosts;
+    // }
 
     @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: number): PostInterface {
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<postEntity>  {
         return this.postService.findOne(id);
     }
 
@@ -39,7 +43,7 @@ export class PostController {
             disableErrorMessages: false,
         })
     )
-    create(@Body() createPostData: CreatePostDto): PostInterface {
+    async create(@Body() createPostData: CreatePostDto): Promise<postEntity> {
         return this.postService.create(createPostData);
     }
 
@@ -52,14 +56,14 @@ export class PostController {
             disableErrorMessages: false,
         })
     )
-    update(@Param('id', ParseIntPipe) id: number,
-        @Body() updatedData: UpdatePostDto): PostInterface {
+    async update(@Param('id', ParseIntPipe) id: number,
+        @Body() updatedData: UpdatePostDto): Promise<postEntity> {
         return this.postService.update(id, updatedData)
     }
 
     @Delete(":id")
     @HttpCode(HttpStatus.NO_CONTENT)
-    remove(@Param('id', ParseIntPipe, PostsExistPipe) id: number): { message: string } {
+    async remove(@Param('id', ParseIntPipe, PostsExistPipe) id: number): Promise<void> {
         return this.postService.remove(id);
     }
 }
